@@ -7,19 +7,21 @@ import imageio.v2 as imageio
 class ImageCropper:
     def __init__(self, image_path, save_dir="crops"):
         self.image_path = image_path
-        # Load grayscale image properly
-        self.image = imageio.imread(image_path)
-        if self.image.ndim == 2:  # grayscale
-            pass  # already grayscale
-        else:
-            raise ValueError("Image is not grayscale as expected.")
-
+        
         self.save_dir = save_dir
         os.makedirs(save_dir, exist_ok=True)
+        
+        # Load grayscale image properly
+        self.image = imageio.imread(image_path)
+
 
         # plot setup
         self.fig, (self.ax_img, self.ax_crop) = plt.subplots(1, 2, figsize=(10, 5))
-        self.ax_img.imshow(self.image, cmap='gray')
+        if self.image.ndim == 2:  # grayscale
+            self.ax_img.imshow(self.image, cmap='gray')
+        else:
+            self.ax_img.imshow(self.image)
+            
         self.ax_img.set_title("Original Image")
         self.ax_crop.set_title("Cropped Region")
         self.ax_crop.axis("off")
